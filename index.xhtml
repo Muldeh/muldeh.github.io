@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <!-- Mandatory for xhtml, there are a bunch of different declarations, I'm not sure what the difference is though, I just know I've always used this one. -->
+  
+<html xmlns="http://www.w3.org/1999/xhtml"> <!-- This is also mandatory for xhtml -->
+
+<head>
+	<title>Warparty battle simulator (Development)</title> 
+	
+	<link rel="stylesheet" type="text/css" href="css.css" />
+</head>
+
+<body>
+	<div id = "header">
+		<h1 align = "center">Warparty Battle Simulator</h1>	
+	</div>
+		
+	<div id = "table">
+		<table align = "center">
+			<tr>
+				<th colspan = "2">Dwarves</th>
+				<th colspan = "2">Humans</th>
+				<th colspan = "2">Undead</th>
+				<th colspan = "2">Goblins</th>
+			</tr>
+			<tr>
+			<td>Warrior</td>
+			<td><input type="number" id = "dWarrior" class = "unit" min = "0" /></td>
+			<td>Soldier</td>
+			<td><input type="number" id = "hSoldier" class = "unit" min = "0" /></td>
+			<td>Skeleton</td>
+			<td><input type="number" id = "uSkeleton" class = "unit" min = "0"  /></td>
+			<td>Goblin</td>
+			<td><input type="number" id = "gGoblin" class = "unit" min = "0" /></td>
+			</tr>
+						<tr>
+			<td>Bezerker</td>
+			<td><input type="number" id = "dBezerker" class = "unit" min = "0" /></td>
+			<td>Pikeman</td>
+			<td><input type="number" id = "hPikeman" class = "unit" min = "0" /></td>
+			<td>Archer</td>
+			<td><input type="number" id = "uArcher" class = "unit" min = "0"  /></td>
+			<td>Orc</td>
+			<td><input type="number" id = "gOrc" class = "unit" min = "0" /></td>
+			</tr>
+						<tr>
+			<td>Archer</td>
+			<td><input type="number" id = "dArcher" class = "unit" min = "0" /></td>
+			<td>Archer</td>
+			<td><input type="number" id = "hArcher" class = "unit" min = "0" /></td>
+			<td>Ghoul Mangler</td>
+			<td><input type="number" id = "uGhoul" class = "unit" min = "0"  /></td>
+			<td>Archer</td>
+			<td><input type="number" id = "gArcher" class = "unit" min = "0" /></td>
+			</tr>
+						<tr>
+			<td>Halfling Pony Rider</td>
+			<td><input type="number" id = "dPony" class = "unit" min = "0" /></td>
+			<td>Knight</td>
+			<td><input type="number" id = "hKnight" class = "unit" min = "0" /></td>
+			<td>Vampire</td>
+			<td><input type="number" id = "uVampire" class = "unit" min = "0"  /></td>
+			<td>Ogre</td>
+			<td><input type="number" id = "gOgre" class = "unit" min = "0" /></td>
+			</tr>
+						<tr>
+			<td>Musketeer</td>
+			<td><input type="number" id = "dMusketeer" class = "unit" min = "0" /></td>
+			<td>Catapult</td>
+			<td><input type="number" id = "hCatapult" class = "unit" min = "0" /></td>
+			<td>Shade</td>
+			<td><input type="number" id = "uShade" class = "unit" min = "0"  /></td>
+			<td>Wolf Rider</td>
+			<td><input type="number" id = "gWolf" class = "unit" min = "0" /></td>
+			</tr>
+						<tr>
+			<td>Cannon</td>
+			<td><input type="number" id = "dCannon" class = "unit" min = "0" /></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>Ballista</td>
+			<td><input type="number" id = "gBallista" class = "unit" min = "0" /></td>
+			</tr>
+			
+		</table>
+	<br />
+	<p>Number of trials: <input type="number" id = "Trials" class = "trials" value = "1" /><button name="action" value="send" type="button" id="Submit">Submit</button></p>
+	<p id = "Output"></p>
+	</div>
+	
+		
+	
+	
+</body>
+<script src="WpSim.js" />
+</html>
+
