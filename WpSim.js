@@ -97,7 +97,6 @@ window.onload=function(){
 	allUnits.sort(compare); // sorts defending units by priority
  }
 
-
 function submit(){
 	getInput();
 	resetArmies();
@@ -129,7 +128,7 @@ function getInput() {
 
 function runTrials() {
 	
-	for(k = 0; k < trials; k++)
+	for(m = 0; m < trials; m++)
 	{
 		fightRound();
 		addAllSurvivors();
@@ -322,7 +321,6 @@ function rollDefend(attacker, defender) {
 		if (defender[i].count == 0){ // check if units of that type remain
 			defender.splice(i, 1); // if not, remove that unit type from defender army
 			i--; // move i position back one to account for the missing unit type
-			console.log("ending i: " + i);
 		}
     }
 }
