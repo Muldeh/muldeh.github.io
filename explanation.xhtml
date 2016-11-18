@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> <!-- Mandatory for xhtml, there are a bunch of different declarations, I'm not sure what the difference is though, I just know I've always used this one. -->
+  
+<html xmlns="http://www.w3.org/1999/xhtml"> <!-- This is also mandatory for xhtml -->
+
+<head>
+	<title>Warparty battle simulator (Development)</title> 
+	
+	<link rel="stylesheet" type="text/css" href="css.css" />
+</head>
+
+<body>
+
+	<div id = "navbar">
+		<p>
+			<a href="index.xhtml">Simulator</a>
+			<a href="explanation.xhtml">Explanation</a>
+			<a href="changes.xhtml">Changes</a>
+		</p>
+	</div>
+
+	<div>
+		<h1>Explanation</h1>	
+		<p>This simulator is designed for <a href="https://boardgamegeek.com/boardgame/94255/warparty">Warparty</a> players 
+		to test out interesting unit combinations and compare them. This simulator is still very much a work in progress as 
+		Warparty has surprisingly deep combat mechanics, and I am only a beginner programmer. I have learned a lot about the game
+		through this project, and I hope you will too. For example, did you know that if an enemy has row 2 units with lower defence
+		than their row 1 units (which is usually the case) you should attack with your units that have -1 or -2 attack modifiers 
+		before your other units in order to maximise your kills?</p>
+		
+		<p>To use the simulator, simply enter some numbers into the boxes next to the units for each of the two armies (Dwarves + Humans 
+		vs Goblins and Undead), pick a number of trials and then click on submit. I would warn against using more than 1000 trials for a start 
+		as depending on the size of the armies this could take a long time.</p>
+		
+		<p>The simulator will roll dice to determine which units hit and miss each round, and then apply those hits one by one to defending units 
+		rolling a die each time to see if the defender lives or dies. The attacker targets the defenders units in order of row first (as required 
+		by the game rules), and then in order of how much attack power they bring compared to how hard to kill they are. The attacker for each unit 
+		is chosen based on the attributes of the defender. For example, if a defender has 2hp, then if the attacking army has any units that deal 2 
+		damage, these units will attack first.</p>
+		
+		<p>You can see a somewhat detailed breakdown of the battle by right clicking the page -> inspect element -> console. This isn't recommended 
+		if you're doing very high numbers of trials though as it may slow down the simulation.</p>
+		
+		<p>You can see my planned future additions on the changes page. If you have any suggestions, questions or comments, feel free to email me at 
+		muldie325@gmail.com</p>
+		
+	</div>
+
+</body>
+</html>
+

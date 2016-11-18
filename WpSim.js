@@ -328,8 +328,8 @@ function rollDefend(attacker, defender) {
 	var iterations = 0;
 	
     for (i = 0; i < defenders; i++) { // for each defender unit type in the army
-        while (defender[i].count > 0 && attacker.length > 0){ // While there are still hits, and defenders of the army type..
 		getAttackOrder(defender);
+        while (defender[i].count > 0 && attacker.length > 0){ // While there are still hits, and defenders of the army type..
 		attackInfo = getAttacker(attacker);
 			if (defender[i].defenceMod < rollDie(attacker[attackInfo[0]]["attack" + attackInfo[1]])){ //Checks to see if the hit would have been avoided due to the defence mod
 				if (defender[i].defence - attacker[attackInfo[0]]["attackMod" + attackInfo[1]] < rollDie(6)) { // Checks if defending unit survives this hit

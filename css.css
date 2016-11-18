@@ -1,8 +1,5 @@
-#test  p {
-	margin-left: auto;
-    margin-right: auto;
-	text-align: center;
-	width: 50vw;
+#navbar {
+	background-color: cyan;
 }
 
 .unit {
@@ -14,10 +11,9 @@ th {
 	width: 10%;
 }
 
-#table {
-	margin-left: 10%;
-	width: 80%;
-	margin-right: 10%;
+div {
+	padding-left: 10%;
+	padding-right: 10%;
 }
 
 .trials {
