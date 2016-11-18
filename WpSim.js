@@ -1,17 +1,20 @@
+"use strict";
 var allUnits = []; // To store all unit objects (containing all unit attributes), exists so that we can loop through every unit.
 var armyGood = []; // Array for storing the army units in the Good army.
 var armyEvil = []; // Array for storing the army units in the Evil army.
-var attackersGood = [];
-var attackersEvil = [];
-var attackOrder = []; 
+var attackersGood = []; // Arrays for storing the units that scored hits, separate from the main army arrays..
+var attackersEvil = []; //...So that units can be killed (and removed from the army array) but still attack back.
+var attackOrder = []; // The ordering of attack types preferred for vs the given defending unit.
 var unitCount; // Variable for storing the value of one of the unit number input fields.
-var winsGood = 0;
-var winsEvil = 0;
-var draws = 0;
-var trials = 0;
-var outputText = "";
+var winsGood = 0; // Count of number of trials resulting in the army of good winning.
+var winsEvil = 0; // Count of number of trials resulting in the army of evil winning.
+var draws = 0; // Count of number of trials resulting in both armies being fully destroyed.
+var trials = 0; // Number of battles to be run from initial unit counts till finish, to reduce variance.
+var outputText = ""; // Stores the output to be printed for the user.
+var shadeKills = 0; // The number of units killed by shades in a round of combat....
+//...Exists so that skeletons can be summoned the next round, rather than right away.
 
-function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defence, defenceMod, move, row, hp, army, cost, reference) {
+function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defence, defenceMod, move, row, hp, army, cost, id) {
 	this.name = name;
 	this.attack = attack;
 	this.attackMod = attackMod; // the "-1" if it exists
@@ -26,7 +29,7 @@ function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defe
 	this.hp = hp;
 	this.army = army; // probably not needed, good/evil
 	this.cost = cost;
-	this.reference = reference; // the id of the number input field
+	this.input = document.getElementById(id); // the id of the number input field
 	this.priority = hp / ((attack + attackMod + attack2 + attackMod2) * (3.5 - defenceMod) * (6 - defence)) + 100 * row ; // determines the targeting order
 	this.survivors = 0;
 	this.currHp = hp;	
@@ -38,31 +41,30 @@ function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defe
 	
 	allUnits.push(this);
 	    
-	this.getCount = function() //should be called when the user starts the sim PS: use this syntax when defining methods for an object!
+	this.getCount = function() // Initialises the unit counts based on the users input.
 	{
-		this.count = document.getElementById(reference).value;
-		this.initialCount = parseInt(this.count);
+		this.count = parseInt(this.input.value, 10) || 0; // Sets count to either the users input, or 0 (if no input).
+		this.initialCount = this.count; // Stores the initial count so that the armies can be reset between trials.
 	}
 	
 	this.addSurvivors = function() 
 	{
-		this.survivors += 1 * this.count;
+		this.survivors += this.count; // Adds up the number of remaining units after each trial.
 	}
 
 	this.resetCount = function ()
 	{
-		this.count = this.initialCount;
-		//console.log(this.name + ": " + this.initialCount);
+		this.count = this.initialCount; // Resets the unit count to the users input.
 	}
 	
 	this.resetSurvivors = function()
 	{
-		this.survivors = 0;
+		this.survivors = 0; // Resets the number of survivors.
 	}
 	
 	this.resetHp = function()
 	{
-		this.currHp = this.hp;
+		this.currHp = this.hp; // Resets the units hp in case damage has been taken.
 	}
 	
 }
@@ -99,16 +101,19 @@ window.onload=function(){
 
 function submit(){
 	getInput();
-	resetArmies();
 	runTrials();
 	averageSurvivors();
+	resetArmies("survivors");
 	printResult();
 	resetAll();
 	//testPrint();
 }
 
 function resetAll(){
-	for (i = 0; i < allUnits.length; i++){
+	var i;
+	var units = allUnits.length;
+	
+	for (i = 0; i < units; i++){
 		allUnits[i].resetSurvivors();
 	}
 	outputText = "";
@@ -119,7 +124,10 @@ function resetAll(){
 }
 
 function getInput() {
-	for (i = 0; i < allUnits.length; i++){
+	var i;
+	var units = allUnits.length;
+	
+	for (i = 0; i < units; i++){
 		allUnits[i].getCount();
 	}
 	trials = document.getElementById("Trials").value;
@@ -127,43 +135,52 @@ function getInput() {
 }
 
 function runTrials() {
+var i;
+var j;
+var k;
+var unitsGood;
+var unitsEvil;
 	
-	for(m = 0; m < trials; m++)
+	for(k = 0; k < trials; k++)
 	{
+		resetArmies("count");
 		fightRound();
 		addAllSurvivors();
-						
-		for (i = 0; i < armyGood.length; i++){		
+		
+		unitsGood = armyGood.length;
+		unitsEvil = armyEvil.length;
+		
+		for (i = 0; i < unitsGood; i++){		
 			outputText += " " + armyGood[i].name + " " + armyGood[i].survivors;
 		}	
-		for (j = 0; j < armyEvil.length; j++){		
+		for (j = 0; j < unitsEvil; j++){		
 			outputText += " " + armyEvil[j].name + " " + armyEvil[j].survivors;
 		}	
 		console.log(outputText);
 		outputText = "";
 	
 
-		if (armyGood.length == 0 && armyEvil.length > 0){
+		if (unitsGood == 0 && unitsEvil > 0){
 			winsEvil++;
 		}
 		
-		if (armyGood.length > 0 && armyEvil.length == 0){
+		if (unitsGood > 0 && unitsEvil == 0){
 			winsGood++;
 		}
 		
-		if (armyGood.length == 0 && armyEvil.length == 0){
+		if (unitsGood == 0 && unitsEvil == 0){
 			console.log("No survivors");
 			draws++;
-		}
-		
+		}		
 		resetUnits();
-		resetArmies(); // creates an instance of each army for this particular round
-		
-	}
+	}	
 }
 
 function averageSurvivors(){
-	for (i = 0; i < allUnits.length; i++){
+	var i;
+	var units = allUnits.length;
+	
+	for (i = 0; i < units; i++){
 		if (allUnits[i].survivors > 0) {
 			console.log(allUnits[i].name + " Survivors: " + allUnits[i].survivors + "Count: " + allUnits[i].count);
 		}
@@ -172,23 +189,33 @@ function averageSurvivors(){
 }
 
 function addAllSurvivors() {
-	for (i = 0; i < allUnits.length; i++){
+	var i;
+	var units = allUnits.length;
+	
+	for (i = 0; i < units; i++){
 		allUnits[i].addSurvivors();
 	}
 }
 
 function resetUnits(){
-	for (i = 0; i < allUnits.length; i++){
+	var i;
+	var units = allUnits.length;
+	
+	for (i = 0; i < units; i++){
 		allUnits[i].resetCount();
 		allUnits[i].resetHp();
 	}
 }
 
-function resetArmies() {	
-	armyGood.splice(0);
-	armyEvil.splice(0);
-	for (i = 0; i < allUnits.length; i++) { // Cycles through each unit type.
-		if (allUnits[i].count > 0) // Checks that there is a positive input for that unit.
+function resetArmies(propertyOf) {	
+	var i;
+	var units = allUnits.length;
+	
+	armyGood.splice(0); // Clears previous array
+	armyEvil.splice(0); // Clears previous array
+	
+	for (i = 0; i < units; i++){ // Cycles through each unit type.
+		if (allUnits[i][propertyOf] > 0) // Checks that there is a positive input for that unit.
 		{
 			if (allUnits[i].army == "Good") { // Checks to see which army the unit is part of
 				armyGood.push(allUnits[i]); // Adds the unit to the Good army if good.
@@ -200,7 +227,10 @@ function resetArmies() {
 }
 
 function resetHits(army){ // Resets the hit counters for the army this round to 0,
-	for(i = 0; i < army.length; i++){
+	var i;
+	var armySize = army.length;
+
+	for(i = 0; i < armySize; i++){
 		army[i].hits = 0;
 		army[i].hits2 = 0;
 	}
@@ -211,8 +241,8 @@ function getAttackType(unit, attack){
 	var modifier = "";
 	var damage = "";
 	var ranged = "";
-	
 	var attackMod = "attackMod";
+	
 	if (attack == 2){
 		attackMod = "attackMod2";
 	}
@@ -235,9 +265,12 @@ function getAttackType(unit, attack){
 }
 
 function rollHits(army) { // Generates number of hits for the specified army.
+	var i;
+	var j;
+	var armySize = army.length;
     resetHits(army);
-	
-    for (i = 0; i < army.length; i++){ // Loops through each unit type
+
+	for(i = 0; i < armySize; i++){ // Loops through each unit type
         for (j = 0; j < army[i].count; j++){ // Loops for each unit of that type in the army
             if (army[i].attack >= rollDie(6)) { // Checks if a hit is scored by the unit
                 army[i].hits++;
@@ -289,15 +322,24 @@ function getAttackOrder(army){
 }
   
 function rollDefend(attacker, defender) {
-    for (i = 0; i < defender.length; i++) { // for each defender unit type in the army
+	var i;
+	var defenders = defender.length;
+	var attackInfo;
+	var iterations = 0;
+	
+    for (i = 0; i < defenders; i++) { // for each defender unit type in the army
         while (defender[i].count > 0 && attacker.length > 0){ // While there are still hits, and defenders of the army type..
 		getAttackOrder(defender);
-		var attackInfo = getAttacker(attacker);
+		attackInfo = getAttacker(attacker);
 			if (defender[i].defenceMod < rollDie(attacker[attackInfo[0]]["attack" + attackInfo[1]])){ //Checks to see if the hit would have been avoided due to the defence mod
 				if (defender[i].defence - attacker[attackInfo[0]]["attackMod" + attackInfo[1]] < rollDie(6)) { // Checks if defending unit survives this hit
 					if(defender[i].currHp <= attacker[attackInfo[0]].damage){
-						defender[i].count--;
+						defender[i].count--;			
 						console.log("A " + defender[i].name + " failed to block a hit and was killed.");
+						if(attacker[attackInfo[0]].name == "Shade"){
+							shadeKills++;
+							console.log("Their skeleton will fight for the undead next round!");
+						}
 						defender[i].resetHp();
 					} else {
 						defender[i].currHp -= attacker[attackInfo[0]].damage;
@@ -309,7 +351,6 @@ function rollDefend(attacker, defender) {
 			} else {
 				console.log("The " + defender[i].name + " wasn't actually hit, due to it's defence modifier of -" + defender[i].defenceMod);
 			}
-			
 			if(attacker[attackInfo[0]].hits == 0 && attacker[attackInfo[0]].hits2 == 0){
 				attacker.splice(attackInfo[0], 1);
 			}
@@ -321,13 +362,19 @@ function rollDefend(attacker, defender) {
 		if (defender[i].count == 0){ // check if units of that type remain
 			defender.splice(i, 1); // if not, remove that unit type from defender army
 			i--; // move i position back one to account for the missing unit type
+			defenders = defender.length;
 		}
     }
 }
  
  function getAttacker(attacker){
-	 for (k = 0; k < attackOrder.length; k++){
-		 for (j = 0; j < attacker.length; j++ ){
+	 var k;
+	 var j;
+	 var attackTypes = attackOrder.length;
+	 var attackers = attacker.length;
+	 
+	 for (k = 0; k < attackTypes; k++){
+		 for (j = 0; j < attackers; j++ ){
 			 if(attacker[j].attackType == attackOrder[k] && attacker[j].hits > 0){
 				 attacker[j].hits--;
 				 return [j, ""];
@@ -342,7 +389,10 @@ function rollDefend(attacker, defender) {
  }
  
  function fightRound() {		
-	while (armyGood.length > 0 && armyEvil.length > 0) { // Loop runs as long as both armies still have units.
+	while (armyGood.length > 0 && armyEvil.length > 0 || shadeKills > 0) { // Loop runs as long as both armies still have units.
+	if(shadeKills > 0){
+		summonSkeletons();
+	}
 	rollHits(armyGood); // Generates number of hits for the army army of good
 	rollHits(armyEvil); // Generates number of hits for the army army of evil
 	populateAttackers();
@@ -351,10 +401,34 @@ function rollDefend(attacker, defender) {
 	}
  }
  
+ function summonSkeletons(){
+	 var i;
+	 var unitsEvil = armyEvil.length;
+	 var hasSkeleton = false;
+	 
+	 for(i = 0; i < unitsEvil; i++){
+		 if(armyEvil[i].name == "Skeleton"){
+			 hasSkeleton = true;
+			 break;
+		 }
+	 }	 
+	 
+	 if(!hasSkeleton){
+		 armyEvil.push(uSkeleton);
+		 armyEvil.sort(compare);
+	}
+	
+	uSkeleton.count += shadeKills;
+	shadeKills = 0;
+ }
+ 
  function populateAttackers(){
+	 var i;
+	 var units = allUnits.length;
+	 
 	 attackersGood.splice(0);
 	 attackersEvil.splice(0);
-	 for (i = 0; i < allUnits.length; i++){
+	 for (i = 0; i < units; i++){
 		 if (allUnits[i].hits > 0 || allUnits[i].hits2 > 0){
 			 if (allUnits[i].army == "Good"){
 				 attackersGood.push(allUnits[i]);
@@ -366,6 +440,11 @@ function rollDefend(attacker, defender) {
  }
   
  function printResult() {
+	var i;
+	var j;
+	var unitsGood = armyGood.length;
+	var unitsEvil = armyEvil.length;
+	 
 	outputText += "\rAverage Good survivors:"
 	for (i = 0; i < armyGood.length; i++){		
 		outputText += "\r" + armyGood[i].name + " " + armyGood[i].survivors;
