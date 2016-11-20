@@ -13,6 +13,11 @@ var trials = 0; // Number of battles to be run from initial unit counts till fin
 var outputText = ""; // Stores the output to be printed for the user.
 var shadeKills = 0; // The number of units killed by shades in a round of combat....
 //...Exists so that skeletons can be summoned the next round, rather than right away.
+var hardenedSteel = false;
+var ringOfCarnage = false;
+var buffsActive = false;
+var enraged = false;
+
 
 function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defence, defenceMod, move, row, hp, army, cost, id) {
 	this.name = name;
@@ -70,28 +75,28 @@ function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defe
 }
 
 //adding all unit stats
-var dWarrior = new unit("Warrior",3,0,0,0,1,false,2,0,1,1,1,"Good",5,"dWarrior");
-var dBezerker = new unit("Bezerker",3,0,3,0,1,false,3,0,1,1,1,"Good",8,"dBezerker");
-var dArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Good",5,"dArcher");
-var dPony = new unit("Halfling Pony Rider",3,0,0,0,1,false,2,1,2,1,1,"Good",12,"dPony");
-var dMusketeer = new unit("Musketeer",4,1,0,0,1,true,1,0,1,2,1,"Good",5,"dMusketeer");
-var dCannon= new unit("Cannon",5,2,0,0,2,true,1,0,1,2,1,"Good",10,"dCannon");
-var hSoldier = new unit("Soldier",3,0,0,0,1,false,2,0,1,1,1,"Good",5,"hSoldier");
-var hPikeman = new unit("Pikeman",3,0,0,0,1,false,3,0,1,1,1,"Good",6,"hPikeman");
-var hArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Good",5,"hArcher");
-var hKnight = new unit("Knight",4,1,0,0,1,false,3,1,2,1,1,"Good",16,"hKnight");
-var hCatapult = new unit("Catapult",5,1,0,0,2,true,1,0,1,2,1,"Good",8,"hCatapult");
-var uSkeleton = new unit("Skeleton",3,0,0,0,1,false,2,0,1,1,1,"Evil",5,"uSkeleton");
-var uArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Evil",5,"uArcher");
-var uGhoul = new unit("Ghoul Mangler",4,1,0,0,1,false,3,0,1,1,2,"Evil",12,"uGhoul");
-var uVampire = new unit("Vampire",4,0,0,0,1,false,3,1,2,1,1,"Evil",16,"uVampire");
-var uShade = new unit("Shade",2,0,0,0,1,true,3,0,2,2,1,"Evil",11,"uShade");
-var gGoblin = new unit("Goblin",3,0,0,0,1,false,2,0,1,1,1,"Evil",5,"gGoblin");
-var gOrc = new unit("Orc",4,0,0,0,1,false,3,0,1,1,1,"Evil",7,"gOrc");
-var gArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Evil",5,"gArcher");
-var gOgre = new unit("Ogre",4,1,0,0,1,false,2,0,1,1,3,"Evil",13,"gOgre");
-var gWolf = new unit("Wolf Rider",4,0,0,0,1,false,2,1,2,1,1,"Evil",14,"gWolf");
-var gBallista = new unit("Ballista",4,1,0,0,2,true,1,0,1,2,1,"Evil",7,"gBallista");
+var dWarrior = new unit("Warrior",3,0,0,0,1,false,2,0,1,1,1,"Dwarves",5,"dWarrior");
+var dBezerker = new unit("Bezerker",3,0,3,0,1,false,3,0,1,1,1,"Dwarves",8,"dBezerker");
+var dArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Dwarves",5,"dArcher");
+var dPony = new unit("Halfling Pony Rider",3,0,0,0,1,false,2,1,2,1,1,"Dwarves",12,"dPony");
+var dMusketeer = new unit("Musketeer",4,1,0,0,1,true,1,0,1,2,1,"Dwarves",5,"dMusketeer");
+var dCannon= new unit("Cannon",5,2,0,0,2,true,1,0,1,2,1,"Dwarves",10,"dCannon");
+var hSoldier = new unit("Soldier",3,0,0,0,1,false,2,0,1,1,1,"Humans",5,"hSoldier");
+var hPikeman = new unit("Pikeman",3,0,0,0,1,false,3,0,1,1,1,"Humans",6,"hPikeman");
+var hArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Humans",5,"hArcher");
+var hKnight = new unit("Knight",4,1,0,0,1,false,3,1,2,1,1,"Humans",16,"hKnight");
+var hCatapult = new unit("Catapult",5,1,0,0,2,true,1,0,1,2,1,"Humans",8,"hCatapult");
+var uSkeleton = new unit("Skeleton",3,0,0,0,1,false,2,0,1,1,1,"Undead",5,"uSkeleton");
+var uArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Undead",5,"uArcher");
+var uGhoul = new unit("Ghoul Mangler",4,1,0,0,1,false,3,0,1,1,2,"Undead",12,"uGhoul");
+var uVampire = new unit("Vampire",4,0,0,0,1,false,3,1,2,1,1,"Undead",16,"uVampire");
+var uShade = new unit("Shade",2,0,0,0,1,true,3,0,2,2,1,"Undead",11,"uShade");
+var gGoblin = new unit("Goblin",3,0,0,0,1,false,2,0,1,1,1,"Goblins",5,"gGoblin");
+var gOrc = new unit("Orc",4,0,0,0,1,false,3,0,1,1,1,"Goblins",7,"gOrc");
+var gArcher = new unit("Archer",4,0,0,0,1,true,1,0,1,2,1,"Goblins",5,"gArcher");
+var gOgre = new unit("Ogre",4,1,0,0,1,false,2,0,1,1,3,"Goblins",13,"gOgre");
+var gWolf = new unit("Wolf Rider",4,0,0,0,1,false,2,1,2,1,1,"Goblins",14,"gWolf");
+var gBallista = new unit("Ballista",4,1,0,0,2,true,1,0,1,2,1,"Goblins",7,"gBallista");
 
 
 window.onload=function(){
@@ -101,12 +106,12 @@ window.onload=function(){
 
 function submit(){
 	getInput();
+	applyBuffs();
 	runTrials();
 	averageSurvivors();
 	resetArmies("survivors");
 	printResult();
 	resetAll();
-	//testPrint();
 }
 
 function resetAll(){
@@ -121,6 +126,37 @@ function resetAll(){
 	winsEvil = 0;
 	draws = 0;
 	trials = 0;
+	uGhoul.hp = 2;
+	if(buffsActive){
+		removeBuffs();
+	}
+}
+
+function removeBuffs(){
+	var i;
+	var j;
+	var units = allUnits.length;
+		
+	if(hardenedSteel){
+		for (i = 0; i < units; i++){
+			if (allUnits[i].army == "Dwarves") {
+				allUnits[i].defenceMod--;
+			}
+		}
+	}
+ 
+	if(ringOfCarnage){
+		for (j = 0; j < units; j++){
+			if (allUnits[j].army == "Goblins" && allUnits[j].row == 1) {
+				allUnits[j].attack--;
+				if (allUnits[j].attack2 > 0){
+					allUnits[j].attack2--;					
+				}
+			}
+		} 
+	}
+	
+	buffsActive = false;
 }
 
 function getInput() {
@@ -131,6 +167,9 @@ function getInput() {
 		allUnits[i].getCount();
 	}
 	trials = document.getElementById("Trials").value;
+	hardenedSteel = document.getElementById("HardenedSteel").checked;
+	ringOfCarnage = document.getElementById("RingOfCarnage").checked;
+	enraged = document.getElementById("Enraged").checked;
 	console.log("Trials: " + trials);
 }
 
@@ -217,7 +256,7 @@ function resetArmies(propertyOf) {
 	for (i = 0; i < units; i++){ // Cycles through each unit type.
 		if (allUnits[i][propertyOf] > 0) // Checks that there is a positive input for that unit.
 		{
-			if (allUnits[i].army == "Good") { // Checks to see which army the unit is part of
+			if (allUnits[i].army == "Dwarves" || allUnits[i].army == "Humans") { // Checks to see which army the unit is part of
 				armyGood.push(allUnits[i]); // Adds the unit to the Good army if good.
 			} else {
 				armyEvil.push(allUnits[i]); // Adds the unit to the Evil army if evil.
@@ -294,7 +333,6 @@ function rollHits(army) { // Generates number of hits for the specified army.
 function rollDie(sides){
     return (Math.floor(Math.random() * sides) + 1); // Generates a random number 1-sides
 }
-
  
 function getAttackOrder(army){
 	if (army[0].currHp > 1){
@@ -388,19 +426,57 @@ function rollDefend(attacker, defender) {
 	 }
  }
  
- function fightRound() {		
+ function fightRound() {
+ var round = 1;	 
 	while (armyGood.length > 0 && armyEvil.length > 0 || shadeKills > 0) { // Loop runs as long as both armies still have units.
 	if(shadeKills > 0){
 		summonSkeletons();
 	}
+	
+	if(round == 2 && buffsActive){
+		removeBuffs();
+	}
+	
 	rollHits(armyGood); // Generates number of hits for the army army of good
 	rollHits(armyEvil); // Generates number of hits for the army army of evil
 	populateAttackers();
 	rollDefend(attackersGood, armyEvil); // The army of evil rolls to defend vs good and takes losses.
 	rollDefend(attackersEvil, armyGood); // The army of good rolls to defend vs evil and takes losses.
+	round++;
 	}
  }
  
+ function applyBuffs(){
+	var i;
+	var j;
+	var units = allUnits.length;
+	
+	if(hardenedSteel){
+		for (i = 0; i < units; i++){
+			if (allUnits[i].army == "Dwarves") {
+				allUnits[i].defenceMod++;
+			}
+		}
+	}
+ 
+	if(ringOfCarnage){
+		for (j = 0; j < units; j++){
+			if (allUnits[j].army == "Goblins" && allUnits[j].row == 1) {
+				allUnits[j].attack++;
+				if (allUnits[j].attack2 > 0){
+					allUnits[j].attack2++;					
+				}
+			}
+		} 
+	}
+	
+	if(enraged){
+		 uGhoul.hp = 3;
+	}
+	
+	buffsActive = true;
+ }
+  
  function summonSkeletons(){
 	 var i;
 	 var unitsEvil = armyEvil.length;
@@ -430,7 +506,7 @@ function rollDefend(attacker, defender) {
 	 attackersEvil.splice(0);
 	 for (i = 0; i < units; i++){
 		 if (allUnits[i].hits > 0 || allUnits[i].hits2 > 0){
-			 if (allUnits[i].army == "Good"){
+			 if (allUnits[i].army == "Dwarves" || allUnits[i].army == "Humans"){
 				 attackersGood.push(allUnits[i]);
 			 } else {
 				 attackersEvil.push(allUnits[i]);
