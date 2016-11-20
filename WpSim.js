@@ -13,10 +13,10 @@ var trials = 0; // Number of battles to be run from initial unit counts till fin
 var outputText = ""; // Stores the output to be printed for the user.
 var shadeKills = 0; // The number of units killed by shades in a round of combat....
 //...Exists so that skeletons can be summoned the next round, rather than right away.
-var hardenedSteel = false;
+var hardenedSteel = false; 
 var ringOfCarnage = false;
-var buffsActive = false;
-var enraged = false;
+var buffsActive = false; //
+var enraged = false; 
 
 function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defence, defenceMod, move, row, hp, army, cost, id) {
 	this.name = name;
