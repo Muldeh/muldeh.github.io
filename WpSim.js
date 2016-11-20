@@ -18,7 +18,6 @@ var ringOfCarnage = false;
 var buffsActive = false;
 var enraged = false;
 
-
 function unit(name, attack, attackMod, attack2, attackMod2, damage, ranged, defence, defenceMod, move, row, hp, army, cost, id) {
 	this.name = name;
 	this.attack = attack;
@@ -105,8 +104,7 @@ window.onload=function(){
  }
 
 function submit(){
-	getInput();
-	applyBuffs();
+	getInput();	
 	runTrials();
 	averageSurvivors();
 	resetArmies("survivors");
@@ -127,9 +125,6 @@ function resetAll(){
 	draws = 0;
 	trials = 0;
 	uGhoul.hp = 2;
-	if(buffsActive){
-		removeBuffs();
-	}
 }
 
 function removeBuffs(){
@@ -183,6 +178,7 @@ var unitsEvil;
 	for(k = 0; k < trials; k++)
 	{
 		resetArmies("count");
+		applyBuffs();
 		fightRound();
 		addAllSurvivors();
 		
@@ -212,6 +208,9 @@ var unitsEvil;
 			draws++;
 		}		
 		resetUnits();
+		if(buffsActive){
+			removeBuffs();
+		}		
 	}	
 }
 
@@ -382,7 +381,7 @@ function rollDefend(attacker, defender) {
 					} else {
 						defender[i].currHp -= attacker[attackInfo[0]].damage;
 						console.log("A " + defender[i].name + " failed to block a hit and now has " + defender[i].currHp + " hp remaining.");
-					}							
+					}
 				} else {
 					console.log("The " + defender[i].name + " managed to block a hit.");
 				}
@@ -392,7 +391,6 @@ function rollDefend(attacker, defender) {
 			if(attacker[attackInfo[0]].hits == 0 && attacker[attackInfo[0]].hits2 == 0){
 				attacker.splice(attackInfo[0], 1);
 			}
-			
         }
 		
 		console.log("There are " + defender[i].count + " " + defender[i].name + "s remaining in the " + defender[i].army + " army.");
